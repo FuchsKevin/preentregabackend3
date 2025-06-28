@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "node --watch src/app.js",
-    "test": "mocha test/supertest.test.js"
+    "test":  "mocha test/*.test.js --timeout 10000"
+    
+    
   },
   "keywords": [],
   "author": "",
@@ -23,11 +25,14 @@
     "mongoose": "^6.13.8",
     "mongose": "^0.0.2-security",
     "multer": "^1.4.5-lts.1",
-    "supertest": "^6.3.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "winston": "^3.17.0"
   },
   "devDependencies": {
     "chai": "^4.3.7",
-    "mocha": "^10.1.0"
+    "jest": "^30.0.3",
+    "mocha": "^10.1.0",
+    "supertest": "^7.1.1"
   }
 }
