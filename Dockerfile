@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Exponer el puerto
-EXPOSE 8080
+EXPOSE 8081
 
 # Comando para iniciar el servidor
 CMD ["npm", "start"]

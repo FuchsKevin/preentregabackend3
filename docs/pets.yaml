@@ -1,0 +1,122 @@
+openapi: 3.0.1
+info:
+  title: AdoptMe API - Mascotas
+  description: Documentación de la API para gestión de mascotas.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api
+    description: Servidor local
+
+tags:
+  - name: Pets
+    description: Endpoints para gestión de mascotas
+
+paths:
+  /pets:
+    get:
+      tags:
+        - Pets
+      summary: Obtener todas las mascotas
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de mascotas obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pet'
+        '401':
+          description: No autorizado - token inválido o ausente
+        '500':
+          description: Error interno del servidor
+
+    post:
+      tags:
+        - Pets
+      summary: Crear una nueva mascota
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPet'
+      responses:
+        '200':
+          description: Mascota creada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Mascota creada
+                  payload:
+                    $ref: '#/components/schemas/Pet'
+        '400':
+          description: Datos inválidos en la solicitud
+        '401':
+          description: No autorizado - token inválido o ausente
+        '500':
+          description: Error interno del servidor
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Pet:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 64b4c9a5d9e45b00123a4567
+        name:
+          type: string
+          example: Firulais
+        specie:
+          type: string
+          example: dog
+        birthDate:
+          type: string
+          format: date
+          example: 2020-01-01
+        adopted:
+          type: boolean
+          example: false
+
+    NewPet:
+      type: object
+      required:
+        - name
+        - specie
+        - birthDate
+      properties:
+        name:
+          type: string
+          example: Firulais
+        specie:
+          type: string
+          example: dog
+        birthDate:
+          type: string
+          format: date
+          example: 2020-01-01

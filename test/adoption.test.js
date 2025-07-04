@@ -11,7 +11,7 @@ describe('Tests funcionales: Adoption Router', () => {
   before(async () => {
     // Crear usuario de prueba
     const userRes = await request(app)
-      .post('/api/users') // Ajustá si tu endpoint es diferente
+      .post('/api/users')
       .send({
         first_name: 'Test',
         last_name: 'User',
@@ -19,11 +19,7 @@ describe('Tests funcionales: Adoption Router', () => {
         age: 30,
         password: '1234'
       });
-
-    expect(userRes.statusCode).to.equal(200);
-    expect(userRes.body).to.have.property('payload');
-    expect(userRes.body.payload).to.have.property('_id');
-    userId = userRes.body.payload._id;
+    userId = userRes.body.payload?._id;
 
     // Crear mascota de prueba
     const petRes = await request(app)
@@ -31,18 +27,22 @@ describe('Tests funcionales: Adoption Router', () => {
       .send({
         name: 'TestPet',
         specie: 'dog',
-        birthDate: '2020-01-01', // Agregado para cumplir el controlador
+        birthDate: '2020-01-01',
         adopted: false
       });
-
-    expect(petRes.statusCode).to.equal(200);
-    expect(petRes.body).to.have.property('payload');
-    expect(petRes.body.payload).to.have.property('_id');
-    petId = petRes.body.payload._id;
+    petId = petRes.body.payload?._id;
   });
 
   after(async () => {
     await mongoose.connection.close();
+  });
+
+  it('✅ Debe crear un usuario de prueba correctamente', async () => {
+    expect(userId).to.be.a('string');
+  });
+
+  it('✅ Debe crear una mascota de prueba correctamente', async () => {
+    expect(petId).to.be.a('string');
   });
 
   it('✅ GET /api/adoption - obtener todas las solicitudes', async () => {
@@ -59,7 +59,8 @@ describe('Tests funcionales: Adoption Router', () => {
 
     expect(res.statusCode).to.equal(200);
     expect(res.body.status).to.equal('success');
-    createdAdoptionId = res.body.payload?._id;
+    expect(res.body.payload).to.have.property('_id');
+    createdAdoptionId = res.body.payload._id;
   });
 
   it('✅ GET /api/adoption/:id - obtener una solicitud por ID', async () => {

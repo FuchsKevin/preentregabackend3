@@ -9,6 +9,8 @@ import petsRouter from './routes/pets.router.js';
 import adoptionsRouter from './routes/adoption.router.js';
 import sessionsRouter from './routes/sessions.router.js';
 import loggerRouter from './routes/logger.router.js';
+import setupSwagger from './docs/swagger.js';
+
 
 import { swaggerUiExpress, specs } from './utils/swagger.js';
 import logger from './utils/logger.js';
@@ -33,6 +35,8 @@ app.use('/api/sessions', sessionsRouter);
 app.use('/', loggerRouter);
 app.use('/api/mocks', mocksRouter);
 app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+
+setupSwagger(app);
 
 // Arrancar servidor
 app.listen(PORT, () => {
